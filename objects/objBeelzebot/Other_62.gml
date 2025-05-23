@@ -15,6 +15,7 @@ if( async_load[? "id"] == query)
         var _response := json_parse( async_load[? "result"]);
         text = _response.response;
         global.bot.messageSend( "1374933576591741022", _response.response);
-        
+
     }
 }
+
