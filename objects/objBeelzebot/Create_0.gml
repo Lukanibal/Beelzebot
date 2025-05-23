@@ -1,24 +1,18 @@
-global.bot := new discordBot( "", "133155376332931072", true);
-///test kitchen server:  1374927012925542430
+testID := "1374927012925542430";
+productionID := "133155376332931072";
+botToken := loadToken("bottoken.secret");
+global.bot := new discordBot( botToken, productionID, true);
+///test kitchen server:  
 
 setupCommands();
 
 ///setup his ability to read messages
-channelID := "1374933576591741022";
+testChannelID := "1374933576591741022";
+productionChannelID := "1362185428584890469";
 readMessage := {};
+
 creatorID := "133624411524825088";
 beelzebotID := "1374927012925542430";
-
-fetchMessage := function()
-{
-    readMessage := global.bot.messageGetBulk( channelID, 1, function()
-    {
-        show_debug_message("reading a message")
-    });
-    call_later( 60, time_source_units_seconds, fetchMessage);
-}
-
-call_later( 60, time_source_units_seconds, fetchMessage);
 
 _load :=
 {

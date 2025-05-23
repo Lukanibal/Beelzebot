@@ -26,8 +26,7 @@ function setupCommands()
                         {
                             model: "llama3.2",
                             prompt: rules.personality.prompt + " say something insane, but keep it short",
-                            stream: false,
-                            indentifiers: { id: _eventData.id, token: _eventData.token}
+                            stream: false
                         }
                         show_debug_message("making him speak");
                         objBeelzebot.query := http_post_string( "http://localhost:11434/api/generate?", json_stringify(_prompt));
@@ -46,8 +45,9 @@ function setupCommands()
         var _messageData := _event.d;
         
         var _message := _messageData.content;
+        show_debug_message(_message)
         
-        if(string_count("beelzebot", string_lower(_message)) && _messageData.author.id != beelzebotID)
+        if(string_count(beelzebotID, string_lower(_message)) && _messageData.author.id != beelzebotID)
         {
            if(_messageData.author.id == creatorID)
            {

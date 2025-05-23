@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"loadToken",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"loadToken",
+  "parent":{
+    "name":"Beelzebot",
+    "path":"folders/Beelzebot.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
