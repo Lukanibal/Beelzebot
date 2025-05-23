@@ -10,6 +10,7 @@
   },
   "defaultScriptType":1,
   "Folders":[
+    {"$GMFolder":"","%Name":"Beelzebot","folderPath":"folders/Beelzebot.yy","name":"Beelzebot","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"GMDiscord","folderPath":"folders/GMDiscord.yy","name":"GMDiscord","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"System","folderPath":"folders/GMDiscord/System.yy","name":"System","resourceType":"GMFolder","resourceVersion":"2.0",},
   ],
@@ -34,6 +35,7 @@
     {"id":{"name":"scr_discordOtherClasses","path":"scripts/scr_discordOtherClasses/scr_discordOtherClasses.yy",},},
     {"id":{"name":"scr_discordSystemEnums","path":"scripts/scr_discordSystemEnums/scr_discordSystemEnums.yy",},},
     {"id":{"name":"scr_discordSystemFunctions","path":"scripts/scr_discordSystemFunctions/scr_discordSystemFunctions.yy",},},
+    {"id":{"name":"setupCommands","path":"scripts/setupCommands/setupCommands.yy",},},
   ],
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
