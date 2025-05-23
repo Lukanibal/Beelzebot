@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"scr_discordSystemEnums",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scr_discordSystemEnums",
+  "parent":{
+    "name":"System",
+    "path":"folders/GMDiscord/System.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

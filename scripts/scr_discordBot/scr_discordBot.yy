@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"scr_discordBot",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"scr_discordBot",
+  "parent":{
+    "name":"GMDiscord",
+    "path":"folders/GMDiscord.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
