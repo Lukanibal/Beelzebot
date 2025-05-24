@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"messageHandling",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"messageHandling",
+  "parent":{
+    "name":"Beelzebot",
+    "path":"folders/Beelzebot.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"setupCommands",
+  "%Name":"memoryManagement",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"setupCommands",
+  "name":"memoryManagement",
   "parent":{
     "name":"Beelzebot",
     "path":"folders/Beelzebot.yy",
