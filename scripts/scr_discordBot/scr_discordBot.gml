@@ -845,7 +845,7 @@ function discordBot(_botToken, _applicationId, _useGatewayEvents = false) constr
 	        op: DISCORD_GATEWAY_OP_CODE.identify,
 	        d: {
 	            token: _botToken,
-				intents: int64(513),
+				intents: int64(33281),
 	            properties: {
 					os: "Linux",
 					browser: "BOT",
