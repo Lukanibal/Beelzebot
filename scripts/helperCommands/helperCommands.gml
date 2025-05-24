@@ -33,3 +33,13 @@ function ShortTermMemory( _role, _content, _name = "") constructor
         name := _name;
     }
 }
+
+function Message( _role, _content, _name = "") constructor 
+{
+    role := _role;
+    content := _content;
+    if(_name != "") 
+    {
+        name := _name;
+    }
+}

@@ -1,45 +1,6 @@
-function setupCommands()
+function setupMessaging()
 { 
-
-    // Create a simple slash command where the user types /ping
-    var _guildId = objBeelzebot.productionServerID;
-    var _testGuildCommand = new discordGuildCommand("speak", "Make Beelzebot say something", DISCORD_COMMAND_TYPE.chatInput );
-    
-    
-    
-    global.bot.guildCommandCreate(_guildId, _testGuildCommand);
-    
-    global.bot.gatewayEventCallbacks[$ "INTERACTION_CREATE"] := function()
-    {
-        var _event := discord_gateWay_event_parse();
-        var _eventData := _event.d;
-        
-        switch(_eventData.type)
-        {
-            case DISCORD_INTERACTION_TYPE.applicationCommand:
-           {
-                switch(_eventData.data.name)
-                {
-                    case "speak":
-                    {
-                        var _prompt :=
-                        {
-                            model: objBeelzebot.modelName,
-                            prompt: rules.personality.prompt + " say something insane, but keep it short",
-                            stream: false,
-                            indentifiers: { id: _eventData.id, token: _eventData.token}
-                        }
-                        show_debug_message("making him speak");
-                        objBeelzebot.query := http_post_string( "http://localhost:11434/api/generate?", json_stringify(_prompt));
-                        global.bot.interactionResponseSend(_eventData.id, _eventData.token, DISCORD_INTERACTION_CALLBACK_TYPE.channelMessageWithSource, text);
-                    }
-                }
-            }
-        }
-        
-    }
-    
-    ///message handling I hope
+  ///message handling I hope
     global.bot.gatewayEventCallbacks[$ "MESSAGE_CREATE"] := function()
     {
         var _event := discord_gateWay_event_parse();
@@ -52,6 +13,8 @@ function setupCommands()
         
         array_push( objBeelzebot.messages, _memory);
         
+        var _messageHistory := new Message("system", "here is what has been said in the conversation so far: " + json_stringify(objBeelzebot.messages));
+        
         if(string_count("beelzebot", string_lower(_message)) && _messageData.author.id != beelzebotID)
         {
            if(_messageData.author.id == creatorID)
@@ -59,7 +22,7 @@ function setupCommands()
                 var _prompt :=
                 {
                     model: objBeelzebot.modelName,
-                    prompt: objBeelzebot.rules.personality.prompt + $" here is an array of context for the current conversation: {objBeelzebot.messages}" + " the following message is from your esteemed creator, do whatever they ask of you: " + _message,
+                    messages: [objBeelzebot.systemPrompt, _messageHistory , new Message("system", "respond to the following message in character: "), _memory],
                     stream: false
                 }
            }
@@ -69,12 +32,12 @@ function setupCommands()
                {
                     model: objBeelzebot.modelName,
                     context: objBeelzebot.messages,
-                    prompt: objBeelzebot.rules.personality.prompt + $" here is an array of context for the current conversation: {objBeelzebot.messages}" +  " respond to the following message in character: " + _message,
+                    messages: [objBeelzebot.systemPrompt, _messageHistory , new Message("system", "respond to the following message in character: "), _memory],
                     stream: false
                     
                }
            }
-           objBeelzebot.query := http_post_string( "http://localhost:11434/api/generate?", json_stringify( _prompt))
+           objBeelzebot.query := http_post_string( "http://localhost:11434/api/chat?", json_stringify( _prompt))
            
         }
         
