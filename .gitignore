@@ -59,4 +59,4 @@ Temporary Items
 *.old
 
 #Secret Files
-*.secret
+bottoken.txt

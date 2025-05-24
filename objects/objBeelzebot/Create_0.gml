@@ -1,27 +1,31 @@
-testID := "1374927012925542430";
-productionID := "133155376332931072";
-botToken := loadToken("bottoken.secret");
-global.bot := new discordBot( botToken, productionID, true);
-///test kitchen server:  
+
+
+bottoken := "";
+testServerID :=  "";
+testChannelID := "";
+productionServerID := "";
+productionChannelID := "";
+
+loadToken( "bottoken.txt");
+modelName := "llama3.2";
+
+
+
 
 setupCommands();
-
-///setup his ability to read messages
-testChannelID := "1374933576591741022";
-productionChannelID := "1362185428584890469";
-readMessage := {};
 
 creatorID := "133624411524825088";
 beelzebotID := "1374927012925542430";
 
+
 _load :=
 {
-    model : "llama3.2"
+    model : modelName
 }
 
 unload := 
 {
-    model : "llama3.2",
+    model : modelName,
     keep_alive : 0
 }
 
@@ -35,7 +39,7 @@ rules :=
 {
     personality :
     {
-        model : "llama3.2",
+        model : modelName,
         prompt : @"Your name is Beelzebot, you act like the Robot Devil from Futurama,
         Your creator uses the name Lukan.
         You are allowed to develop a personality.
@@ -56,7 +60,7 @@ rules :=
 ///I wanted wakeup in the rules struct but GM was throwing a fit about it because I reference personality inside of it
 wakeup :=
 {
-    model : "llama3.2",
+    model : modelName,
     prompt : rules.personality.prompt + @"let everybody know you're awake! You're in a discord server!",
     stream : false
 }

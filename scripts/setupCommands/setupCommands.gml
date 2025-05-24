@@ -2,7 +2,7 @@ function setupCommands()
 { 
 
     // Create a simple slash command where the user types /ping
-    var _guildId = "1374933575131992186";
+    var _guildId = objBeelzebot.productionServerID;
     var _testGuildCommand = new discordGuildCommand("speak", "Make Beelzebot say something", DISCORD_COMMAND_TYPE.chatInput );
     
     
@@ -24,9 +24,10 @@ function setupCommands()
                     {
                         var _prompt :=
                         {
-                            model: "llama3.2",
+                            model: objBeelzebot.modelName,
                             prompt: rules.personality.prompt + " say something insane, but keep it short",
-                            stream: false
+                            stream: false,
+                            indentifiers: { id: _eventData.id, token: _eventData.token}
                         }
                         show_debug_message("making him speak");
                         objBeelzebot.query := http_post_string( "http://localhost:11434/api/generate?", json_stringify(_prompt));
@@ -45,26 +46,32 @@ function setupCommands()
         var _messageData := _event.d;
         
         var _message := _messageData.content;
-        show_debug_message(_message)
         
-        if(string_count(beelzebotID, string_lower(_message)) && _messageData.author.id != beelzebotID)
+        ///add this message to the short term memory
+        var _memory := new ShortTermMemory( "user", _message, _messageData.author.id);
+        
+        array_push( objBeelzebot.messages, _memory);
+        
+        if(string_count("beelzebot", string_lower(_message)) && _messageData.author.id != beelzebotID)
         {
            if(_messageData.author.id == creatorID)
            {
                 var _prompt :=
-               {
-                    model: "llama3.2",
-                    prompt: objBeelzebot.rules.personality.prompt + " the following message is from your esteemed creator, respond in character: " + _message,
+                {
+                    model: objBeelzebot.modelName,
+                    prompt: objBeelzebot.rules.personality.prompt + $" here is an array of context for the current conversation: {objBeelzebot.messages}" + " the following message is from your esteemed creator, do whatever they ask of you: " + _message,
                     stream: false
-               }
+                }
            }
            else 
            {
                var _prompt :=
                {
-                    model: "llama3.2",
-                    prompt: objBeelzebot.rules.personality.prompt + " respond to the following message in character: " + _message,
+                    model: objBeelzebot.modelName,
+                    context: objBeelzebot.messages,
+                    prompt: objBeelzebot.rules.personality.prompt + $" here is an array of context for the current conversation: {objBeelzebot.messages}" +  " respond to the following message in character: " + _message,
                     stream: false
+                    
                }
            }
            objBeelzebot.query := http_post_string( "http://localhost:11434/api/generate?", json_stringify( _prompt))
