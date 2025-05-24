@@ -15,9 +15,7 @@
     {"$GMFolder":"","%Name":"System","folderPath":"folders/GMDiscord/System.yy","name":"System","resourceType":"GMFolder","resourceVersion":"2.0",},
   ],
   "ForcedPrefabProjectReferences":[],
-  "IncludedFiles":[
-    {"$GMIncludedFile":"","%Name":"bottoken.secret","CopyToMask":-1,"filePath":"datafiles","name":"bottoken.secret","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-  ],
+  "IncludedFiles":[],
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
@@ -28,7 +26,7 @@
     {"id":{"name":"obj_discordController","path":"objects/obj_discordController/obj_discordController.yy",},},
     {"id":{"name":"objBeelzebot","path":"objects/objBeelzebot/objBeelzebot.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
-    {"id":{"name":"loadToken","path":"scripts/loadToken/loadToken.yy",},},
+    {"id":{"name":"helperCommands","path":"scripts/helperCommands/helperCommands.yy",},},
     {"id":{"name":"scr_discordBot","path":"scripts/scr_discordBot/scr_discordBot.yy",},},
     {"id":{"name":"scr_discordConfig","path":"scripts/scr_discordConfig/scr_discordConfig.yy",},},
     {"id":{"name":"scr_discordEnums","path":"scripts/scr_discordEnums/scr_discordEnums.yy",},},

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"helperCommands",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"helperCommands",
+  "parent":{
+    "name":"Beelzebot",
+    "path":"folders/Beelzebot.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
