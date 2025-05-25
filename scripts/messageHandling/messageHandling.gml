@@ -1,6 +1,5 @@
 function setupMessaging()
-{ 
-  ///message handling I hope
+{///setup the gateway to handle incoming messages and commands
     global.bot.gatewayEventCallbacks[$ "MESSAGE_CREATE"] := function()
     {
         var _event := discord_gateWay_event_parse();
@@ -13,14 +12,12 @@ function setupMessaging()
         {exit};
         
         ///add a reaction for some fun
-        
         var _reactPrompt :=
         {
             model : objBeelzebot.modelName,
             messages : [new Message( "user", $"read the following message and only respond with the one emoji it makes you think of: {_message}")], 
             stream : false
         }
-        
         objBeelzebot.reactingID := _messageData.id;
         objBeelzebot.reactionHandler := http_post_string( "http://localhost:11434/api/chat?", json_stringify( _reactPrompt));
         
@@ -36,7 +33,7 @@ function setupMessaging()
         var _memoryPrompt :=
         {
             model : objBeelzebot.modelName,
-            messages : [objBeelzebot.systemPrompt, global.memoryPrompt, global.longTermMemory],
+            messages : [objBeelzebot.systemPrompt, global.memoryPrompt],
             stream : false
         }
         
@@ -72,17 +69,41 @@ function setupMessaging()
             if(string_count( "!idonotconsent", _message))
             {
                 global.bot.messageSend( activeChannel, $"Okay, I will purge you from my data banks, {_messageData.author.username}");
-                ///TODO filter through the array and remove all of the user's messages from memory
-                
                 var _arrayLength := array_length(global.consent);
-                for (var _i = 0; _i < _arrayLength; _i++) 
+                for ( var _i = 0; _i < _arrayLength; _i++) 
                 {
-                	if(global.consent[ _i] == _messageData.author.username)
+                	if( global.consent[ _i] == _messageData.author.username)
                     {
-                        array_delete(global.consent, _i, 1);
+                        array_delete( global.consent, _i, 1);
                         break;
                     }
                 }
+                
+                _arrayLength := ( array_length( global.longTermMemory)-1);
+                for ( var _i = _arrayLength; _i > 0; _i--) 
+                {
+                	if( global.longTermMemory[ _i][$ "name"] == _messageData.author.username)
+                    {
+                        array_delete( global.longTermMemory, _i, 1);
+                    }
+                }
+                
+                exit;
+            }
+        
+            if(string_count( "!deleteme", _message))
+            {
+                global.bot.messageSend( activeChannel, $"Okay, {_messageData.author.username}, your old messages have been deleted, but new messages will still be stored in my data banks!");
+                
+                _arrayLength := ( array_length( global.longTermMemory)-1);
+                for ( var _i = _arrayLength; _i > 0; _i--) 
+                {
+                	if( global.longTermMemory[ _i][$ "name"] == _messageData.author.username)
+                    {
+                        array_delete( global.longTermMemory, _i, 1);
+                    }
+                }
+                
                 exit;
             }
             

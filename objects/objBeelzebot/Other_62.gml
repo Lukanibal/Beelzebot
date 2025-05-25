@@ -1,4 +1,4 @@
-
+///again, I don't even think I _need_ to do this, but here it is just in case
 if( async_load[? "id"] == llamaLoader)
 {
     if( async_load[? "status"] == 0)
@@ -9,7 +9,7 @@ if( async_load[? "id"] == llamaLoader)
     }
 }
 
-
+///chat responses
 if( async_load[? "id"] == query)
 {
     if( async_load[? "status"] == 0)
@@ -20,13 +20,14 @@ if( async_load[? "id"] == query)
         {
             if(is_undefined(_response[$ "error"]))
             {
-                var _message := _response.message.content;
-                text = _message;
-                global.bot.messageSend( activeChannel, _message);
+                text := _response.message.content;
+                global.bot.messageSend( activeChannel, text);
+                var _mem := new ShortTermMemory( "assistant", text);
+                array_push(global.longTermMemory, _mem);
             }
             else 
             {
-            	show_debug_message( $"this is messed up: {_response}" )
+            	show_debug_message( $"this sent an error back: {_response}" )
                 exit;
             }
         }
@@ -34,14 +35,10 @@ if( async_load[? "id"] == query)
         {
         	global.bot.messageSend( activeChannel, "Sorry Beelzebot couldn't handle that request, too much is happening in his addled mind right now <3");
         }
-        
-        var _mem := new ShortTermMemory( "assistant", text);
-        array_push(global.longTermMemory, _mem);
-
     }
 }
 
-///this is only for reactions
+///this handle reations to messages
 if( async_load[? "id"] == reactionHandler)
 {
     if( async_load[? "status"] == 0)

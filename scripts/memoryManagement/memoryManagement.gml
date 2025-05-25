@@ -54,7 +54,7 @@ function loadMemories()
         
         show_debug_message( $"memory stream: {_json}");
         global.longTermMemory := json_parse( _json);
-        global.memoryPrompt := new Message( "system", $"The following messages are your long term memories from all previous conversations: ");
+        global.memoryPrompt := new Message( "system", $"The following messages are your long term memories from all previous conversations: {global.longTermMemory}");
           
     }
     else 

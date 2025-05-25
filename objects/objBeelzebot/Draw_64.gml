@@ -1,1 +1,1 @@
-draw_text_ext_color(10, 10, text, 24, room_width, c_blue, c_blue, c_blue, c_blue, 1);
+draw_text_ext_color(10, 10, text, 24, room_width, c_red, c_red, c_yellow, c_yellow, 1);
