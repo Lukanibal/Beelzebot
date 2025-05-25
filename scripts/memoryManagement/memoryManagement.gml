@@ -79,6 +79,12 @@ function saveMemories()
     call_later( 60, time_source_units_seconds, saveMemories);
 };
 
+function wipeMemories()
+{
+    global.longTermMemory := [];
+    objBeelzebot.messages := [];
+}
+
 ///SHORT TERM STUFF BELOW
 function ShortTermMemory( _role, _content, _name = "") constructor 
 {

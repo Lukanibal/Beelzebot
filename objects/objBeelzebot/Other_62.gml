@@ -26,7 +26,7 @@ if( async_load[? "id"] == query)
             }
             else 
             {
-            	show_debug_message( $"this is messaed up: {_response}" )
+            	show_debug_message( $"this is messed up: {_response}" )
                 exit;
             }
         }
@@ -41,3 +41,14 @@ if( async_load[? "id"] == query)
     }
 }
 
+///this is only for reactions
+if( async_load[? "id"] == reactionHandler)
+{
+    if( async_load[? "status"] == 0)
+    {
+        var _response := json_parse(async_load[? "result"]);
+        var _emote := _response.message.content;
+        
+        global.bot.messageReactionCreate( objBeelzebot.activeChannel, reactingID, _emote);
+    }
+}

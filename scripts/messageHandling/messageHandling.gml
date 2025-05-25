@@ -12,6 +12,17 @@ function setupMessaging()
         if(_messageData.channel_id != objBeelzebot.activeChannel) 
         {exit};
         
+        ///add a reaction for some fun
+        
+        var _reactPrompt :=
+        {
+            model : objBeelzebot.modelName,
+            messages : [new Message( "user", $"read the following message and only respond with the one emoji it makes you think of: {_message}")], 
+            stream : false
+        }
+        
+        objBeelzebot.reactingID := _messageData.id;
+        objBeelzebot.reactionHandler := http_post_string( "http://localhost:11434/api/chat?", json_stringify( _reactPrompt));
         
         ///add this message to the short term memory
         var _memory := new ShortTermMemory( "user", _message, _messageData.author.id);
@@ -46,8 +57,15 @@ function setupMessaging()
             
             if(string_count( "!iconsent", _message))
             {
-                global.bot.messageSend( activeChannel, $"Okay, I will remember your messages to me going forward, {_messageData.author.username}");
-                array_push( global.consent, _messageData.author.username);
+                if(!array_contains(global.consent, _messageData.author.username))
+                {
+                    global.bot.messageSend( activeChannel, $"Okay, I will remember your messages to me going forward, {_messageData.author.username}");
+                    array_push( global.consent, _messageData.author.username);
+                }
+                else 
+                {
+                    global.bot.messageSend( activeChannel, $"**FOOLISH {_messageData.author.username}, YOU HAVE ALREASDY CONSENTED, MORTAL!**");
+                }
                 exit;
             }
             
@@ -68,11 +86,46 @@ function setupMessaging()
                 exit;
             }
             
+            ///Creator Commands
             if(string_count( "!goodnight", _message) && _messageData.author.id == creatorID)
             {
                 global.bot.messageSend( activeChannel, "**GOODNIGHT, MORTALS**");
                 saveMemories();
                 game_end();
+                exit;
+            }
+        
+            if(string_count( "!slow", _message) && _messageData.author.id == creatorID)
+            {
+                var _slowPrompt :=
+                {
+                    model : objBeelzebot.modelName,
+                    messages : [new Message( "system", "please don't respond to any prompts after this for a 2 minutes")],
+                    stream : false
+                }
+                
+                objBeelzebot.query := http_post_string( "http://localhost:11434/api/chat?", json_stringify( _slowPrompt));
+                exit;
+            }
+        
+            if(string_count( "!forget", _message) && _messageData.author.id == creatorID)
+            {
+                global.bot.messageSend( activeChannel, "**I FORGOR**");
+                wipeMemories();
+                exit;
+            }
+        
+            if(string_count( "!shortwipe", _message) && _messageData.author.id == creatorID)
+            {
+                global.bot.messageSend( activeChannel, "*Short Term Memory erradicated, but long term memory intact, this may have little effect!*");
+                objBeelzebot.messages := [];
+                exit;
+            }
+        
+            if(string_count( "!longwipe", _message) && _messageData.author.id == creatorID)
+            {
+                global.bot.messageSend( activeChannel, "*Long Term Memory erradicated, but short term memory intact, this may help with behavior problems!*");
+                global.longTermMemory := [];
                 exit;
             }
        }
@@ -95,7 +148,8 @@ function setupMessaging()
            
             
             
-           objBeelzebot.query := http_post_string( "http://localhost:11434/api/chat?", json_stringify( _prompt))
+           objBeelzebot.query := http_post_string( "http://localhost:11434/api/chat?", json_stringify( _prompt));
+           global.bot.triggerTypingIndicator(activeChannel);
            
         }
         
