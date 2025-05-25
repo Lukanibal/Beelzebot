@@ -1,5 +1,5 @@
 Beelzebot is powered by the GM Discord extension made by Ches Rowe here: https://github.com/chesrowe/GMDiscord  
-He's also powered by llama3.2 via ollama running on a local machine, more on that here: https://github.com/ollama  
+He's also powered by llama3.1:8b via ollama running on a local machine, more on that here: https://github.com/ollama  
 
 He's currently able to:  
 -Send insane messages to chat  
