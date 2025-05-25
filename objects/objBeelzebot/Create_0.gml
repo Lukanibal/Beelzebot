@@ -5,9 +5,12 @@ testServerID :=  "";
 testChannelID := "";
 productionServerID := "";
 productionChannelID := "";
-modelName := "llama3.2";
+modelName := "llama3.1:8b";
 creatorID := "";///this is me!
 beelzebotID := "";///this is so he can see pings
+slowmode := false;
+slowmodeCounter := 0;
+canRespond := true;
 
 ///these are for reactions
 reactionHandler := -1;

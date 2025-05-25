@@ -12,14 +12,17 @@ function setupMessaging()
         {exit};
         
         ///add a reaction for some fun
-        var _reactPrompt :=
-        {
-            model : objBeelzebot.modelName,
-            messages : [new Message( "user", $"read the following message and only respond with the one emoji it makes you think of: {_message}")], 
-            stream : false
+        if(string_count("beelzebot", string_lower(_message)) ||  string_count(beelzebotID, string_lower(_message)) || string_count(creatorID, _message) || string_count("lukan", string_lower(_message)) )
+        { 
+            var _reactPrompt :=
+            {
+                model : objBeelzebot.modelName,
+                messages : [new Message( "user", $"read the following message and only respond with the one emoji it makes you think of:"), new Message("user", _message, _messageData.author.username)], 
+                stream : false
+            }
+            objBeelzebot.reactingID := _messageData.id;
+            objBeelzebot.reactionHandler := http_post_string( "http://localhost:11434/api/chat?", json_stringify( _reactPrompt));
         }
-        objBeelzebot.reactingID := _messageData.id;
-        objBeelzebot.reactionHandler := http_post_string( "http://localhost:11434/api/chat?", json_stringify( _reactPrompt));
         
         ///add this message to the short term memory
         var _memory := new ShortTermMemory( "user", _message, _messageData.author.id);
@@ -118,20 +121,17 @@ function setupMessaging()
         
             if(string_count( "!slow", _message) && _messageData.author.id == creatorID)
             {
-                var _slowPrompt :=
+                objBeelzebot.slowmode := true;
+                call_later( 120, time_source_units_seconds, function()
                 {
-                    model : objBeelzebot.modelName,
-                    messages : [new Message( "system", "please don't respond to any prompts after this for a 2 minutes")],
-                    stream : false
-                }
-                
-                objBeelzebot.query := http_post_string( "http://localhost:11434/api/chat?", json_stringify( _slowPrompt));
+                    slowmode := false;
+                });
                 exit;
             }
         
             if(string_count( "!forget", _message) && _messageData.author.id == creatorID)
             {
-                global.bot.messageSend( activeChannel, "**I FORGOR**");
+                global.bot.messageSend( activeChannel, choose("**I FORGOR**", "_**MEMEORY WIPED**_"));
                 wipeMemories();
                 exit;
             }
