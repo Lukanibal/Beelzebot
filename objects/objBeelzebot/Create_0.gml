@@ -6,8 +6,8 @@ testChannelID := "";
 productionServerID := "";
 productionChannelID := "";
 modelName := "llama3.2";
-creatorID := "133624411524825088";///this is me!
-beelzebotID := "1374927012925542430";///this is so he can see pings
+creatorID := "";///this is me!
+beelzebotID := "";///this is so he can see pings
 
 ///these are for reactions
 reactionHandler := -1;
