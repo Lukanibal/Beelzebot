@@ -12,7 +12,8 @@ function setupMessaging()
         {exit};
         
         ///add a reaction for some fun
-        if(string_count("beelzebot", string_lower(_message)) ||  string_count(beelzebotID, string_lower(_message)) || string_count(creatorID, _message) || string_count("lukan", string_lower(_message)) )
+        if( string_count("beelzebot", string_lower(_message)) ||  string_count(beelzebotID, string_lower(_message)) || string_count(creatorID, _message) || string_count("lukan", string_lower(_message)) 
+        || array_contains(global.consent, _messageData.author.username) )
         { 
             var _reactPrompt :=
             {
@@ -150,8 +151,25 @@ function setupMessaging()
                 exit;
             }
        }
+        ///check for mentions
+        var _isMentioned := false;
+        if(!is_undefined(_messageData[$ "mentions"]))
+        {
+            var _arrayLength := array_length(_messageData.mentions);
+            for (var _i = 0; _i < _arrayLength; _i++)
+            {
+            	if( _messageData.mentions[ _i].id == beelzebotID)
+                {
+                    _isMentioned := true;
+                }
+                else 
+                {
+                    continue;
+                }
+            }
+        }
         
-        if((string_count("beelzebot", string_lower(_message)) ||  string_count(beelzebotID, string_lower(_message))) && _messageData.author.id != beelzebotID)
+        if((string_count("beelzebot", string_lower(_message)) || string_count(beelzebotID, string_lower(_message)) || _isMentioned) && _messageData.author.id != beelzebotID)
         {
            
                 var _prompt :=
