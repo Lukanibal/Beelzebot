@@ -146,6 +146,7 @@ function setupMessaging()
                 var _status := string_replace( _message, "!status", ""); 
                 _status := string_replace( _status, "beelzebot", "");
                 
+                ///I tired using the correct discordActivity struct as well, but it also doesn't work!!!!
                 var _activity :=
                 {
                     name : "",
