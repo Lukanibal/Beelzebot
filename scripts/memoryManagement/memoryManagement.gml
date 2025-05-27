@@ -3,6 +3,7 @@
 ///long term memory is never truncated, so GM will crash before he runs out of memory
 global.longTermMemory := [];
 global.memoryPrompt := {};
+global.users := {};
 
 function LongTermMemory( _role, _content, _name) constructor 
 {
@@ -29,6 +30,12 @@ function fetchConsents()
         
         file_text_close( _file);
         global.consent := json_parse( _json);
+        ///create the new user specific memory manager
+        ///TODO - finish iomplementing this new memory management system, it will hopefully reduce the memory strain on the LLM
+        array_foreach(global.consent, function(_element, _index)
+        {
+            global.users[$ _element] := [];
+        });
     }
     else 
     {
@@ -74,6 +81,8 @@ function saveMemories()
     file_text_write_string( _file, json_stringify(global.consent));
     file_text_writeln( _file);
     file_text_close( _file);
+    
+    
     
     ///make sure it gets called again
     call_later( 60, time_source_units_seconds, saveMemories);

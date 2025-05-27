@@ -120,16 +120,6 @@ function setupMessaging()
                 exit;
             }
         
-            if(string_count( "!slow", _message) && _messageData.author.id == creatorID)
-            {
-                objBeelzebot.slowmode := true;
-                call_later( 120, time_source_units_seconds, function()
-                {
-                    slowmode := false;
-                });
-                exit;
-            }
-        
             if(string_count( "!forget", _message) && _messageData.author.id == creatorID)
             {
                 global.bot.messageSend( activeChannel, choose("**I FORGOR**", "_**MEMEORY WIPED**_"));
@@ -150,9 +140,25 @@ function setupMessaging()
                 global.longTermMemory := [];
                 exit;
             }
+        
+            if(string_count( "!status", _message) && _messageData.author.id == creatorID)
+            {
+                var _status := string_replace( _message, "!status", ""); 
+                _status := string_replace( _status, "beelzebot", "");
+                
+                var _activity :=
+                {
+                    name : "",
+                    type : DISCORD_PRESENCE_ACTIVITY.custom,
+                    state : _status,
+                    url : ""
+                }
+                
+                global.bot.presenceSend( _activity, "online");
+                exit;
+            }
        }
         ///check for mentions
-        var _isMentioned := false;
         if(!is_undefined(_messageData[$ "mentions"]))
         {
             var _arrayLength := array_length(_messageData.mentions);
@@ -160,7 +166,7 @@ function setupMessaging()
             {
             	if( _messageData.mentions[ _i].id == beelzebotID)
                 {
-                    _isMentioned := true;
+                    objBeelzebot.isMentioned := true;
                 }
                 else 
                 {
@@ -169,7 +175,7 @@ function setupMessaging()
             }
         }
         
-        if((string_count("beelzebot", string_lower(_message)) || string_count(beelzebotID, string_lower(_message)) || _isMentioned) && _messageData.author.id != beelzebotID)
+        if((string_count("beelzebot", string_lower(_message)) || string_count(beelzebotID, string_lower(_message)) || objBeelzebot.isMentioned) && _messageData.author.id != beelzebotID)
         {
            
                 var _prompt :=
@@ -183,7 +189,8 @@ function setupMessaging()
                 {
                 	array_push(_prompt.messages, global.longTermMemory[ _i]);
                 }
-                array_push(_prompt.messages, new Message("system", $"the following message is from {_messageData.author.username}, respond to this with context: "), _memory)
+                array_push(_prompt.messages, new Message("system", $"the following message is from {_messageData.author.username}, respond to this with context if you want to: "), _memory);
+                
            
             
             

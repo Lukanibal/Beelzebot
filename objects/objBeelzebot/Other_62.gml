@@ -21,7 +21,15 @@ if( async_load[? "id"] == query)
             if(is_undefined(_response[$ "error"]))
             {
                 text := _response.message.content;
-                global.bot.messageSend( activeChannel, text);
+                if(!objBeelzebot.isMentioned)
+                {
+                    global.bot.messageSend( activeChannel, text);
+                }
+                else 
+                {
+                	global.bot.messageSend( activeChannel, text);
+                }
+                
                 var _mem := new ShortTermMemory( "assistant", text);
                 array_push(global.longTermMemory, _mem);
             }
@@ -33,7 +41,9 @@ if( async_load[? "id"] == query)
         }
         else 
         {
-        	global.bot.messageSend( activeChannel, "Sorry Beelzebot couldn't handle that request, too much is happening in his addled mind right now <3");
+        	
+            global.bot.messageSend( activeChannel, "Sorry Beelzebot couldn't handle that request, too much is happening in his addled mind right now <3");
+            
         }
     }
 }

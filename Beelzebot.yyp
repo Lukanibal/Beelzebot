@@ -18,6 +18,7 @@
   "IncludedFiles":[
     {"$GMIncludedFile":"","%Name":"bottoken.txt","CopyToMask":-1,"filePath":"datafiles","name":"bottoken.txt","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"memory.consent","CopyToMask":-1,"filePath":"datafiles","name":"memory.consent","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"searchkey.txt","CopyToMask":-1,"filePath":"datafiles","name":"searchkey.txt","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
   ],
   "isEcma":false,
   "LibraryEmitters":[],

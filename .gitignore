@@ -61,3 +61,5 @@ Temporary Items
 #Secret Files
 bottoken.txt
 *.consent
+searchkey.txt
+datafiles/helper/*

@@ -20,6 +20,7 @@ function loadToken( _tokenFile)
         
         file_text_close( _file);
         global.bot := new discordBot( objBeelzebot.bottoken, objBeelzebot.productionServerID, true);
+        
     }
     else 
     {

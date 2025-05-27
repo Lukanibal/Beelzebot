@@ -807,6 +807,7 @@ function discordBot(_botToken, _applicationId, _useGatewayEvents = false) constr
 	}
 	
 	#endregion
+    
 	
 	#region System methods
 	
