@@ -796,10 +796,9 @@ function discordBot(_botToken, _applicationId, _useGatewayEvents = false) constr
 	    var _payload = {
 	        op: DISCORD_GATEWAY_OP_CODE.presenceUpdate,
 	        d: {
-	            since: int64(date_current_datetime()),
-	            activities: _activities,
-	            status: _status,
-	            afk: false
+                user: { id: int64(objBeelzebot.beelzebotID)},
+	            activities: [ _activities],
+	            status: _status
 	        }
 	    };
 

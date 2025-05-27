@@ -143,17 +143,16 @@ function setupMessaging()
         
             if(string_count( "!status", _message) && _messageData.author.id == creatorID)
             {
-                var _status := string_replace( _message, "!status", ""); 
-                _status := string_replace( _status, "beelzebot", "");
+                var _status := string_replace( _message, "!status", "");
                 
                 ///I tired using the correct discordActivity struct as well, but it also doesn't work!!!!
-                var _activity :=
+                var _activity := 
                 {
-                    name : "",
-                    type : DISCORD_PRESENCE_ACTIVITY.custom,
-                    state : _status,
-                    url : ""
-                }
+                    name : _status,
+                    type : int64(DISCORD_PRESENCE_ACTIVITY.custom),
+                    emoji : "",
+                    state : _status
+                }//new discordPresenceActivity( _status, DISCORD_PRESENCE_ACTIVITY.custom)
                 
                 global.bot.presenceSend( _activity, "online");
                 exit;
