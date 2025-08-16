@@ -17,7 +17,12 @@ function loadToken( _tokenFile)
         file_text_readln( _file);
         objBeelzebot.beelzebotID :=  file_text_read_string(_file);
         file_text_readln( _file);
+        objBeelzebot.productionThreadID :=  file_text_read_string(_file);
+        file_text_readln( _file);
         
+        objBeelzebot.responseAreaID := objBeelzebot.productionThreadID;
+        
+		
         file_text_close( _file);
         global.bot := new discordBot( objBeelzebot.bottoken, objBeelzebot.productionServerID, true);
         
@@ -28,4 +33,35 @@ function loadToken( _tokenFile)
         game_end();
     }
 }
+
+function fileRead( _filename)
+{
+    var _file := file_text_open_read( _filename);
+    var _string := "";
+    
+    while(!file_text_eof( _file))
+    {
+        _string += file_text_read_string( _file);
+        file_text_readln( _file);
+    }
+    file_text_close( _file);
+    
+    return _string;
+}
+
+
+
+function loadPermanentMemories()
+{
+	var _file := file_text_open_read("permemory.txt");
+	
+	do
+	{
+		array_push(global.permaMemory, file_text_read_string(_file));
+		file_text_readln(_file);
+	}
+	until(file_text_eof(_file));
+	show_debug_message("loaded permanent memories");
+}
+
 

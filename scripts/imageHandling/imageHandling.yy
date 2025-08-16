@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"imageHandling",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"imageHandling",
+  "parent":{
+    "name":"Beelzebot",
+    "path":"folders/Beelzebot.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

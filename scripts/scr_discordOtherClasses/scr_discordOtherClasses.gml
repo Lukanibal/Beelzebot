@@ -107,12 +107,15 @@ function discordFileAttachment(_filePath, _fileName, _fileDescripton = "") const
 /// @desc Activity 
 /// @param name
 /// @param {enum.DISCORD_PRESENCE_ACTIVITY} type The type of activity
-function discordPresenceActivity(_name, _activityType, _url, _createdAt, _timestamps, _applicationId, _details, _state, _emoji, _party, _assets, _secrets, _instance, _flags, _buttons) constructor {
+function discordPresenceActivity(_name, _activityType, _url := "", _createdAt, _timestamps, _applicationId, _details, _state, _emoji, _party, _assets, _secrets, _instance, _flags, _buttons) constructor {
 	name = _name;
 	type = _activityType;
+    emoji := "";
+    state := _state;
 		
 	if (_activityType == DISCORD_PRESENCE_ACTIVITY.streaming){
-		url = _url
+		url = _url;
 	}
+    
 }
 

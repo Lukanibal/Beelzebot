@@ -1,9 +1,13 @@
 ///This is where I will desperately try to have some semblance of long term personalized memory
 
 ///long term memory is never truncated, so GM will crash before he runs out of memory
+//False, long term memory is now 128 memories long, the boy breaks otherwise
 global.longTermMemory := [];
 global.memoryPrompt := {};
 global.users := {};
+
+global.permaMemory := [];///these are controlled entirely by me, and can be accessed at will, should try to not have too many of them though
+
 
 function LongTermMemory( _role, _content, _name) constructor 
 {
@@ -31,7 +35,7 @@ function fetchConsents()
         file_text_close( _file);
         global.consent := json_parse( _json);
         ///create the new user specific memory manager
-        ///TODO - finish iomplementing this new memory management system, it will hopefully reduce the memory strain on the LLM
+        ///TODO - finish implementing this new memory management system, it will hopefully reduce the memory strain on the LLM
         array_foreach(global.consent, function(_element, _index)
         {
             global.users[$ _element] := [];
@@ -46,6 +50,24 @@ fetchConsents();
 
 function loadMemories()
 {
+    
+    ///TODO for each user, load their data into the GM side of memory, only feed to trhe LLM when required
+    
+    array_foreach( global.consent, function( _element, _index)
+    {
+        if(file_exists( $"{_element}.json"))
+        {
+            global.users[$ _element] := {};
+            global.users[$ _element][$ "data"] := json_parse( fileRead( $"{_element}.json"));
+        }
+        else 
+        {
+            global.users[$ _element] := {};
+            global.users[$ _element][$ "data"] := {};
+        }
+        
+    });
+    
     if( file_exists( "memories.file"))
     {
         var _file := file_text_open_read( "memories.file");
@@ -82,10 +104,14 @@ function saveMemories()
     file_text_writeln( _file);
     file_text_close( _file);
     
-    
-    
-    ///make sure it gets called again
-    call_later( 60, time_source_units_seconds, saveMemories);
+    array_foreach( global.consent, function( _element, _index)
+    {
+        var _file := file_text_open_write( $"{_element}.json");
+        file_text_write_string( _file, json_stringify( global.users[$ _element]));
+        file_text_writeln( _file);
+        file_text_close( _file);
+    });
+   
 };
 
 function wipeMemories()
@@ -114,4 +140,29 @@ function Message( _role, _content, _name = "") constructor
         name := _name;
     }
 }
+
+function updateName( _user, _newName)
+{
+    //global.users[$ _user][$ "nickname"] := _newName;
+    struct_set( global.users[$ _user], "nickname", _newName);
+}
+
+function nameGet( _user)
+{
+    if(variable_struct_exists(global.users, _user) && variable_struct_exists(global.users[$ _user], "nickname"))
+    {
+        return global.users[$ _user][$ "nickname"];
+    }
+    else 
+    {
+    	return _user;
+    }
+}
+
+
+
+
+
+
+
 

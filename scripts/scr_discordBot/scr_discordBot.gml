@@ -792,14 +792,18 @@ function discordBot(_botToken, _applicationId, _useGatewayEvents = false) constr
 	/// @desc Updates a bot's presence
 	/// @param activity
 	/// @param status
-	static presenceSend = function(_activities, _status) {
+	static presenceSend = function( _activities, _status) {
 	    var _payload = {
 	        op: DISCORD_GATEWAY_OP_CODE.presenceUpdate,
 	        d: {
-                user: { id: int64(objBeelzebot.beelzebotID)},
-	            activities: [ _activities],
-	            status: _status
-	        }
+                    
+                    user : {id : objBeelzebot.beelzebotID},
+                    guild_id : objBeelzebot.productionServerID,
+                    status : _status,
+                    activities: [_activities],
+                    client_status : {web: "online"}
+                
+	            }
 	    };
 
 	    __gatewayEventSend(_payload);

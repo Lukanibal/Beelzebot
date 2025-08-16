@@ -23,28 +23,29 @@ if( async_load[? "id"] == query)
                 text := _response.message.content;
                 if(!objBeelzebot.isMentioned)
                 {
-                    global.bot.messageSend( activeChannel, text);
+                    global.bot.messageSend( responseAreaID, $"{text}");
                 }
                 else 
                 {
-                	global.bot.messageSend( activeChannel, text);
+                	global.bot.messageSend( responseAreaID, $"{text}");
                 }
                 
-                var _mem := new ShortTermMemory( "assistant", text);
+                var _mem := new ShortTermMemory( "assistant", $"{text}");
                 array_push(global.longTermMemory, _mem);
             }
             else 
             {
-            	show_debug_message( $"this sent an error back: {_response}" )
+            	show_debug_message( $"this sent an error back: {_response}" );
                 exit;
             }
         }
         else 
         {
         	
-            global.bot.messageSend( activeChannel, "Sorry Beelzebot couldn't handle that request, too much is happening in his addled mind right now <3");
+            global.bot.messageSend( responseAreaID, "Sorry Beelzebot couldn't handle that request, too much is happening in his addled mind right now <3");
             
         }
+        isMentioned := false;
     }
 }
 
@@ -56,6 +57,30 @@ if( async_load[? "id"] == reactionHandler)
         var _response := json_parse(async_load[? "result"]);
         var _emote := _response.message.content;
         
-        global.bot.messageReactionCreate( objBeelzebot.activeChannel, reactingID, _emote);
+        global.bot.messageReactionCreate( responseAreaID, reactingID, _emote);
+    }
+}
+
+
+///image handler
+if( async_load[? "id"] == global.imageResponse)
+{
+    if( async_load[? "status"] == 0)
+    {
+        var _json := json_parse(async_load[? "result"]);
+		show_debug_message(_json);
+		//var _response := _json.message.content;
+        
+		//have beelzebot respond instead of vision ai
+        var _prompt :=
+		{
+			model: objBeelzebot.modelName,
+			messages: [objBeelzebot.systemPrompt, new Message("system", $"Take this response and say it in your own insane words:"), "image recieved"],
+			stream: false
+		}
+		
+		objBeelzebot.query := http_post_string( "http://localhost:11434/api/chat?", json_stringify( _prompt));
+        global.bot.triggerTypingIndicator(objBeelzebot.responseAreaID);
+        
     }
 }
