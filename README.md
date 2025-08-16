@@ -16,5 +16,6 @@ Admin Commands are as follows:
 `!forget` will erase his long and short term memories from ram, but not from disk in the case of long term memory.  
 `!shortwipe` will clear his short term memory.  
 `!longwipe` will clear his long term memory from ram, but not from disk.  
+`!goodnight` will save his memories to disk and shut his processes down.  
 
 Commands will not erase the file on disk, as Beelzebot will overwrite the file every minute or so anyway when he saves long term memory to disk.
