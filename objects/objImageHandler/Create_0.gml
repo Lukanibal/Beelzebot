@@ -1,8 +1,18 @@
 ///handle images
 
-current_image := "";
-current_url := "";
-
-image_buffer := -1;
+current_image := -1;
 
 message := "";
+
+
+image_type := ".png";
+
+images := [];
+
+function img_num()
+{
+	return array_length(objImageHandler.images);
+}
+
+
+resize := -1;

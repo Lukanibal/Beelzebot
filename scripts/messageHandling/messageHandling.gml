@@ -130,7 +130,8 @@ function setupMessaging()
             if(string_count( "!myname", _message))
             {
                 
-                var _name := string_replace_all( _message, "!myname", "");
+                /*
+				var _name := string_replace_all( _message, "!myname", "");
                 _name := string_replace_all( _name, "!myname ", "");
                 _name := string_replace_all( _name, "beelzebot ", "");
                 _name := string_replace_all( _name, "Beelzebot ", "");
@@ -139,6 +140,8 @@ function setupMessaging()
                 show_debug_message( $"NEW NICKNAME ASSOCIATION {_messageData.author.username} : {_name}")
                 updateName( _messageData.author.username, _name);
                 global.bot.messageSend( objBeelzebot.responseAreaID, $"_Name preference updated, thank you for letting me know, **{_name}!**_");
+				*/
+				global.bot.messageSend( objBeelzebot.responseAreaID, $"Naming Services are currently offline, in other words get fucked <3");
                 exit;
             }
             
@@ -155,6 +158,14 @@ function setupMessaging()
             {
                 global.bot.messageSend( objBeelzebot.responseAreaID, choose("**I FORGOR**", "_**MEMEORY WIPED**_"));
                 wipeMemories();
+                exit;
+            }
+		
+			if(string_count( "!imagetest", _message) && _messageData.author.id == creatorID)
+            {
+                global.bot.messageSend( objBeelzebot.responseAreaID, "testing image capabilities");
+                imageTestFunc( objImageHandler.testImage);
+				dumpImage( objImageHandler.testImage);
                 exit;
             }
         
@@ -189,11 +200,19 @@ function setupMessaging()
                 exit;
             }
 		
-		if(string_count( "!fullwipe", _message) && _messageData.author.id == creatorID)
+			if(string_count( "!fullwipe", _message) && _messageData.author.id == creatorID)
             {
                 global.bot.messageSend( objBeelzebot.responseAreaID, "**HERBIE: FULLY WIPED!**");
 				objBeelzebot.messages := [];
                 global.longTermMemory := [];
+                exit;
+            }
+		
+			//stop with no saving
+			if(string_count( "!stop", _message) && _messageData.author.id == creatorID)
+            {
+                global.bot.messageSend( objBeelzebot.responseAreaID, "**goodbye friends!**");
+				game_end();
                 exit;
             }
         
@@ -227,14 +246,45 @@ function setupMessaging()
 					
 					var _content_type := _messageData.attachments[0][$ "content_type"];
 					
-					if( string_count("image/png", _content_type) || string_count("image/jpg", _content_type) || string_count("image/jpeg", _content_type) || string_count("image/webm", _content_type) )
+					if( string_count("image/png", _content_type) || string_count("image/jpg", _content_type) || string_count("image/jpeg", _content_type) || string_count("image/webm", _content_type) 
+					|| string_count("image/gif", _content_type))
 					{
 						var _attachment := _messageData.attachments[0];
 						var _content_type := _attachment[$ "content_type"];
+						var _extension := ".png";
 						
-						show_debug_message( $"Image Processing Log: {_attachment}");
+						switch(_content_type)
+						{
+							case "image/png":
+							{
+								break;
+							}
+								
+							case "image/jpg":
+							case "image/jpeg":
+							{
+								_extension := ".jpeg";
+								break;
+							}
+								
+							case "image/webm":
+							{
+								_extension := ".webm";
+								break;
+							}
+								
+							case "image/gif":
+							{
+								_extension := ".gif";
+								break;
+							}
+						}
 						
-						objImageHandler.current_image := http_get_file(_attachment[$ "url"], "image.png");
+						objImageHandler.image_type := _extension;
+						
+						show_debug_message( "Image Processing Log: " + string(_attachment));
+						
+						objImageHandler.current_image := http_get_file(_attachment[$ "url"], $"images/image{_extension}");
 						objImageHandler.message := _message;
 					}
 					

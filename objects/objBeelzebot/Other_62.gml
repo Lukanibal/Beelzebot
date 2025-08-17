@@ -72,15 +72,27 @@ if( async_load[? "id"] == global.imageResponse)
 		//var _response := _json.message.content;
         
 		//have beelzebot respond instead of vision ai
-        var _prompt :=
-		{
-			model: objBeelzebot.modelName,
-			messages: [objBeelzebot.systemPrompt, new Message("system", $"Take this response and say it in your own insane words:"), "image recieved"],
-			stream: false
-		}
 		
-		objBeelzebot.query := http_post_string( "http://localhost:11434/api/chat?", json_stringify( _prompt));
-        global.bot.triggerTypingIndicator(objBeelzebot.responseAreaID);
+		if(variable_struct_exists(_json, "response"))
+		{
+	        
+			var _prompt :=
+			{
+				model: objBeelzebot.modelName,
+				messages: [objBeelzebot.systemPrompt, new Message("system", "Take this response and say it in your own insane words:"), new Message("user", _json.response)],
+				stream: false
+			}
+			
+			objBeelzebot.query := http_post_string( "http://localhost:11434/api/chat?", json_stringify( _prompt));
+	        global.bot.triggerTypingIndicator(objBeelzebot.responseAreaID);
+			
+			show_debug_message("IMAGE RESPONSE");
+		}
+		else if(variable_struct_exists(_json, "error"))
+		{
+			global.bot.messageSend( responseAreaID, $"Beelzebot cannot handle very large or overly complex images.\r\nPlease try reducing the size to 300X300 or smaller, or reducing complexity by cutting out background noise.");
+			//objImageHandler.resize := 0;
+		}
         
     }
 }
