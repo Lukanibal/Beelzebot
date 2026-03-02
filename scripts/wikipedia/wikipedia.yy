@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"wikipedia",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"wikipedia",
+  "parent":{
+    "name":"Beelzebot",
+    "path":"folders/Beelzebot.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

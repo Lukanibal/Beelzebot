@@ -22,13 +22,14 @@ function setupMessaging()
         || array_contains(global.consent, _messageData.author.username) )
         { 
             var _reactPrompt :=
-            {
-                model : objBeelzebot.modelName,
-                messages : [new Message( "user", $"read the following message and only respond with the one emoji it makes you think of:"), new Message("user", _message, _messageData.author.username)], 
-                stream : false
-            }
-            objBeelzebot.reactingID := _messageData.id;
-            objBeelzebot.reactionHandler := http_post_string( "http://localhost:11434/api/chat?", json_stringify( _reactPrompt));
+			{
+				model : objBeelzebot.modelName,
+				messages : [new Message( "user", $"respond with the first unicode emoji the following message makes you think of: "), new Message("user", _messageData.content, _messageData.author.username)], 
+				stream : false
+			}
+			//React( _messageData);
+			objBeelzebot.reactingID := _messageData.id;
+			objBeelzebot.reactionHandler := http_post_string( "http://localhost:11434/api/chat?", json_stringify( _reactPrompt));
         }
         
         ///add this message to the short term memory
@@ -144,6 +145,79 @@ function setupMessaging()
 				global.bot.messageSend( objBeelzebot.responseAreaID, $"Naming Services are currently offline, in other words get fucked <3");
                 exit;
             }
+		
+			if(string_count( "!showart", _message))
+            {
+                
+                global.grab_art := http_get(global.base_url+"random_pic.php");
+                exit;
+            }
+		
+			///questions
+			if( (string_count( "search wikipedia", _message)) || string_count( "wikipedia", _message) )
+			{
+				
+				var _query := string_replace(_message, "search wikipedia for", "");
+				_query := string_replace(_query, "search wikipedia", "");
+				_query := string_replace(_query, "my boy", "");
+				_query := string_replace(_query, "my son", "");
+				_query := string_replace(_query, "beelzebot", "");
+				_query := string_replace(_query, $"@<{objBeelzebot.beelzebotID}>", "");
+				
+				var _prompt :=
+				{
+					model: objBeelzebot.modelName,
+					messages: [objBeelzebot.systemPrompt],
+					stream: false
+				}
+				//global.heldQuestion := _message;
+				//array_push(_prompt.messages, new Message("system", $"respond WIKI if wikipedia would answer the question better than you, or ME otherwise"),
+				//new Message("user", _message, _messageData.author.username));
+				
+				//global.wikiQuestion := http_post_string( "http://localhost:11434/api/chat?", json_stringify( _prompt));
+				wiki_query(_query);
+				exit;
+			}
+		
+			///questions
+			if( string_count( "!gif", _message) )
+			{
+				
+				var _query := string_replace(_message, "!gif", "");
+				_query := string_replace(_query, "my boy", "");
+				_query := string_replace(_query, "my son", "");
+				_query := string_replace(_query, "beelzebot", "");
+				_query := string_replace(_query, $"@<{objBeelzebot.beelzebotID}>", "");
+				
+				var _prompt :=
+				{
+					model: objBeelzebot.modelName,
+					messages: [objBeelzebot.systemPrompt],
+					stream: false
+				}
+				//global.heldQuestion := _message;
+				//array_push(_prompt.messages, new Message("system", $"respond WIKI if wikipedia would answer the question better than you, or ME otherwise"),
+				//new Message("user", _message, _messageData.author.username));
+				
+				//global.wikiQuestion := http_post_string( "http://localhost:11434/api/chat?", json_stringify( _prompt));
+				show_debug_message($"GIF REQUEST:{_query}")
+				request_gif(_query);
+				exit;
+			}
+		
+			if( (string_count( "!paint", _message) ))
+			{
+				
+				var _query := string_replace(_message, "!paint ", "");
+				_query := string_replace(_query, "my boy ", "");
+				_query := string_replace(_query, "my son ", "");
+				_query := string_replace(_query, "beelzebot ", "");
+				_query := string_replace(_query, $"<@{objBeelzebot.beelzebotID}> ", "");
+				
+				
+				paint(_query);
+				exit;
+			}
             
             ///Creator Commands
             if(string_count( "!goodnight", _message) && _messageData.author.id == creatorID)
@@ -215,6 +289,32 @@ function setupMessaging()
 				game_end();
                 exit;
             }
+		
+			if(string_count( "!obliviate", _message) && _messageData.author.id == creatorID)
+            {
+                var _id := string_replace(string_lower(_message), "!obliviate ", "");
+				_id := string_replace( _message, "beelzebot ", "");
+				show_debug_message($"ID: {_id}")
+				global.bot.messageDelete("1362185428584890469", $"{_id}");
+				
+                exit;
+            }
+		
+			if(string_count( "!ignore", _message) && _messageData.author.id == creatorID)
+            {
+                ///turn on Beelzbot's ignore feature, he will only respond to direct requests after this
+				///!listen reverses this behaviour
+				global.ingore := true;
+                exit;
+            }
+		
+			if(string_count( "!listen", _message) && _messageData.author.id == creatorID)
+            {
+                ///turn on Beelzbot's ignore feature, he will only respond to direct requests after this
+				///!listen reverses this behaviour
+				global.ingore := false;
+                exit;
+            }
         
             
        }
@@ -237,20 +337,20 @@ function setupMessaging()
         
 		
 		///MESSAGES ARE HANDLED HERE GOD DAMN IT
-        if((string_count("beelzebot", string_lower(_message)) || string_count(beelzebotID, string_lower(_message)) || objBeelzebot.isMentioned) && _messageData.author.id != beelzebotID)
+        if( (( messageContains(_message, false) || objBeelzebot.isMentioned) && _messageData.author.id != beelzebotID) ||
+		 (( messageContains(_message, true) || objBeelzebot.isMentioned) && _messageData.author.id != beelzebotID && _messageData.author.id == objBeelzebot.creatorID) )
         {
 			
 				///if there's an image in the message, hand this over to the vision model
 				if(variable_struct_exists(_messageData, "attachments") && array_length(_messageData.attachments) > 0)
 				{
-					
+					shutdown_llm();
 					var _content_type := _messageData.attachments[0][$ "content_type"];
 					
 					if( string_count("image/png", _content_type) || string_count("image/jpg", _content_type) || string_count("image/jpeg", _content_type) || string_count("image/webm", _content_type) 
 					|| string_count("image/gif", _content_type))
 					{
 						var _attachment := _messageData.attachments[0];
-						var _content_type := _attachment[$ "content_type"];
 						var _extension := ".png";
 						
 						switch(_content_type)
@@ -330,4 +430,49 @@ function setupMessaging()
 		
     global.bot.gatewayEventCallbacks[$ "THREAD_MEMBER_UPDATE"] := global.bot.gatewayEventCallbacks[$ "MESSAGE_CREATE"]; 
 }
+
+function messageContains( _msg, _lukanSpecific)
+{
+	
+	if(global.ignore)
+	{
+		if(string_count(objBeelzebot.beelzebotID, _msg))
+		{
+			return true;
+		}
+		else 
+		{
+			return false;
+		}
+	}
+	else
+	{
+		var _len := array_length(objBeelzebot.activationPhrases) - 1;
+		for(var _i := 0; _i <= _len; _i++)
+		{
+		
+			if(string_count( objBeelzebot.activationPhrases[_i], _msg))
+			{
+				return true;
+			}
+		}
+		
+		if(_lukanSpecific)
+		{
+			_len := array_length(objBeelzebot.creatorPhrases) - 1;
+			for(var _i := 0; _i <= _len; _i++)
+			{
+				
+				
+				if(string_count( objBeelzebot.creatorPhrases[_i], _msg))
+				{
+					return true;
+				}
+			}
+		}
+	}
+	
+	return false;
+}
+
 

@@ -16,3 +16,4 @@ function img_num()
 
 
 resize := -1;
+resized := false;

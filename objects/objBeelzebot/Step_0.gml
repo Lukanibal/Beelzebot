@@ -10,3 +10,15 @@ if(array_length(global.longTermMemory) > 128)
 {
     array_shift(global.longTermMemory);
 }
+
+
+///reactions
+if(array_length(reactions_array))
+{
+	reactions_array[0].send();
+	
+	if(!array_length(reactions_array[0].reactions))
+	{
+		array_shift(reactions_array);
+	}
+}

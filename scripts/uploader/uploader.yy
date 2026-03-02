@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"uploader",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"uploader",
+  "parent":{
+    "name":"Beelzebot",
+    "path":"folders/Beelzebot.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

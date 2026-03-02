@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Reactio0ns",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Reactio0ns",
+  "parent":{
+    "name":"Beelzebot",
+    "path":"folders/Beelzebot.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

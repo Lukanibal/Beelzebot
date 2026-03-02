@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"stable_diff_artistry",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"stable_diff_artistry",
+  "parent":{
+    "name":"Beelzebot",
+    "path":"folders/Beelzebot.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

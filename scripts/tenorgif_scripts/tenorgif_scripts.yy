@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"tenorgif_scripts",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"tenorgif_scripts",
+  "parent":{
+    "name":"Beelzebot",
+    "path":"folders/Beelzebot.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

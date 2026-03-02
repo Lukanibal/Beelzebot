@@ -1,3 +1,5 @@
+global.gif_request := -1;
+
 function loadToken( _tokenFile)
 {
     if(file_exists( _tokenFile))
@@ -19,6 +21,10 @@ function loadToken( _tokenFile)
         file_text_readln( _file);
         objBeelzebot.productionThreadID :=  file_text_read_string(_file);
         file_text_readln( _file);
+		
+		///add hedonismbot to the sibling's array
+		array_push(objBeelzebot.siblings, file_text_read_string(_file));///add's HB's ID to the list
+        file_text_readln( _file);
         
         objBeelzebot.responseAreaID := objBeelzebot.productionThreadID;
         
@@ -26,6 +32,12 @@ function loadToken( _tokenFile)
         file_text_close( _file);
         global.bot := new discordBot( objBeelzebot.bottoken, objBeelzebot.productionServerID, true);
         
+		
+		///secrets
+		_file := file_text_open_read( "tenor.secret");
+        global.gif_token := file_text_read_string( _file);
+        file_text_readln( _file);
+		file_text_close(_file);
     }
     else 
     {
@@ -64,4 +76,16 @@ function loadPermanentMemories()
 	show_debug_message("loaded permanent memories");
 }
 
+
+function shutdown_llm()
+{
+	var _prompt :=
+	{
+		model: objBeelzebot.modelName,
+		stream: false,
+		keep_alive: 0
+	}
+	
+	objBeelzebot.query := http_post_string( "http://localhost:11434/api/chat?", json_stringify( _prompt));
+}
 
